@@ -50,11 +50,17 @@ public class EsysFlutterSharePlugin implements MethodCallHandler {
 
         HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
         String fileName = (String) argsMap.get("fileName");
+        String filePath = (String) argsMap.get("filePath");
         String title = (String) argsMap.get("title");
 
         Context activeContext = _registrar.activeContext();
 
-        File imageFile = new File(activeContext.getCacheDir(), fileName);
+        File imageFile;
+        if (fileName != null) {
+            imageFile = new File(activeContext.getCacheDir(), fileName);
+        } else {
+            imageFile = new File(filePath);
+        }
         String fileProviderAuthority = activeContext.getPackageName() + ".fileprovider.github.com/orgs/esysberlin/esys-flutter-share";
         Uri contentUri = FileProvider.getUriForFile(activeContext, fileProviderAuthority, imageFile);
         Intent shareIntent = new Intent(Intent.ACTION_SEND);

@@ -22,15 +22,23 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
     func shareImage(arguments:Any?) -> Void {
         // prepare method channel args
         let argsMap = arguments as! NSDictionary
-        let fileName:String = argsMap.value(forKey: "fileName") as! String
-        
+        let fileName:String? = argsMap.value(forKey: "fileName") as! String?
+        let filePath:String? = argsMap.value(forKey: "filePath") as! String?
+
         // no use in ios
         //let title:String = argsMap.value(forKey: "title") as! String
         
         // load the iage
         let docsPath:String = NSSearchPathForDirectoriesInDomains(.cachesDirectory,.userDomainMask , true).first!;
-        let imagePath = NSURL(fileURLWithPath: docsPath).appendingPathComponent(fileName)
-        let imageData:NSData? = NSData(contentsOf: imagePath!)
+
+        let newFilePath: NSURL
+        if (fileName == nil) {
+            newFilePath = NSURL(fileURLWithPath: filePath!)
+        } else {
+            newFilePath = NSURL(fileURLWithPath: docsPath).appendingPathComponent(fileName!)! as NSURL
+        }
+        
+        let imageData:NSData? = NSData(contentsOf: newFilePath as URL)
         let imageToShare:UIImage = UIImage(data: imageData! as Data)!
         
         // set up activity view controller

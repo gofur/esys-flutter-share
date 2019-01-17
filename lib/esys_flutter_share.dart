@@ -33,4 +33,17 @@ class EsysFlutterShare {
 
     _channel.invokeMethod('shareImage', argsMap);
   }
+
+  /// Shares images with other supported applications on Android and iOS.
+  /// The title parameter is just supported on Android and does nothing on iOS.
+  static Future shareImageFromFile(
+      String filePath, String droidTitle) async {
+    Map argsMap = <String, String>{
+      'filePath': '$filePath',
+      'title': '$droidTitle'
+    };
+
+    _channel.invokeMethod('shareImage', argsMap);
+  }
+
 }
